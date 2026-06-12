@@ -28,7 +28,7 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "release": "changeset publish",
-    "prepare": "husky"
+    "prepare": "node -e \"if(!process.env.CI && !process.env.npm_config_global)require('child_process').execSync('husky',{stdio:'inherit'})\""
   },
   "keywords": [
     "cli",

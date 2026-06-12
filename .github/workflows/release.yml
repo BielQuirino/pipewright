@@ -25,6 +25,8 @@ jobs:
 
       - run: npm ci
 
+      - run: npm run build
+
       - name: Create Release PR or Publish
         uses: changesets/action@v1
         with:
