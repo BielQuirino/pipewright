@@ -1,11 +1,29 @@
-# Pipewright
+<div align="center">
+  <img src=".github/assets/logo.png" alt="Pipewright" width="220" />
 
-> Scaffold CI/CD pipelines and project boilerplates — interactively, in seconds.
+  <br />
+  <br />
 
-[![CI](https://github.com/BielQuirino/pipewright/actions/workflows/ci.yml/badge.svg)](https://github.com/BielQuirino/pipewright/actions/workflows/ci.yml)
-[![npm version](https://img.shields.io/npm/v/pipewright)](https://www.npmjs.com/package/pipewright)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+  <p>Scaffold CI/CD pipelines and project boilerplates — interactively, in seconds.</p>
+
+  <p>
+    <a href="https://github.com/BielQuirino/pipewright/actions/workflows/ci.yml">
+      <img src="https://github.com/BielQuirino/pipewright/actions/workflows/ci.yml/badge.svg" alt="CI" />
+    </a>
+    <a href="https://www.npmjs.com/package/pipewright">
+      <img src="https://img.shields.io/npm/v/pipewright?color=42d392" alt="npm version" />
+    </a>
+    <a href="https://www.npmjs.com/package/pipewright">
+      <img src="https://img.shields.io/npm/dm/pipewright?color=42d392" alt="npm downloads" />
+    </a>
+    <a href="LICENSE">
+      <img src="https://img.shields.io/badge/License-MIT-42d392.svg" alt="License: MIT" />
+    </a>
+    <a href="CONTRIBUTING.md">
+      <img src="https://img.shields.io/badge/PRs-welcome-42d392.svg" alt="PRs Welcome" />
+    </a>
+  </p>
+</div>
 
 ---
 
@@ -61,20 +79,16 @@ $ pipewright init my-api
 ## Installation
 
 ```bash
+# npm
 npm install -g pipewright
-```
 
-```bash
+# pnpm
 pnpm add -g pipewright
-```
 
-```bash
+# yarn
 yarn global add pipewright
-```
 
-Or use without installing:
-
-```bash
+# no install needed
 npx pipewright init my-project
 ```
 
@@ -84,7 +98,7 @@ npx pipewright init my-project
 
 ### `pipewright init [project-name]`
 
-Scaffolds a complete project from scratch — framework files, config files, and CI/CD pipeline.
+Scaffolds a complete project from scratch — framework files, configs, and CI/CD pipeline.
 
 ```
 Options:
@@ -94,27 +108,22 @@ Options:
       --node <version>            Node version for CI      (default: 20)
       --docker                    Include Dockerfile
       --release                   Include release/publish pipeline
-      --git                       Run git init after scaffold
-      --install                   Run dependency install after scaffold
-      --no-pipeline               Scaffold app only, skip CI/CD
+      --no-pipeline               Skip CI/CD generation
 ```
 
 **Examples:**
 
 ```bash
-# Interactive (recommended for first use)
+# Interactive
 pipewright init
 
 # NestJS + GitHub Actions + Docker, no prompts
 pipewright init my-api --framework nestjs --provider github --docker --yes
 
-# Vue 3 + Azure DevOps, pnpm
-pipewright init my-frontend --framework vue --provider azure --package-manager pnpm
+# Vue 3 + Azure DevOps + pnpm
+pipewright init my-frontend --framework vue --provider azure -m pnpm
 
-# App only, no pipeline
-pipewright init my-app --framework nestjs --no-pipeline
-
-# Preview what would be created without writing files
+# Preview without writing files
 pipewright init my-api --framework nestjs --provider github --dry-run
 ```
 
@@ -122,43 +131,21 @@ pipewright init my-api --framework nestjs --provider github --dry-run
 
 ### `pipewright add pipeline`
 
-Adds a CI/CD pipeline to an **existing** project. Auto-detects the framework and package manager from `package.json`.
-
-```
-Options:
-  -p, --provider <provider>   github | azure | gitlab
-      --node <version>        Node version               (default: detected/20)
-      --docker                Include Docker publish job
-      --release               Include release pipeline
-```
-
-**Examples:**
+Adds a CI/CD pipeline to an **existing** project. Auto-detects framework and package manager.
 
 ```bash
-# Interactive — prompts for provider
+# Interactive
 pipewright add pipeline
 
 # Non-interactive
 pipewright add pipeline --provider github --docker
-
-# Different working directory
-pipewright add pipeline --provider gitlab --cwd /path/to/project
 ```
 
 ---
 
 ### `pipewright add dockerfile`
 
-Adds an optimized **multi-stage Dockerfile** to an existing project. Auto-detects framework.
-
-```
-Options:
-  -f, --framework <framework>   nestjs | vue   (auto-detected if omitted)
-      --port <port>             Exposed port    (default: 3000 NestJS / 80 Vue)
-      --node <version>          Base image Node version (default: 20)
-```
-
-**Examples:**
+Adds an optimized **multi-stage Dockerfile** to an existing project.
 
 ```bash
 # Auto-detect framework
@@ -166,16 +153,11 @@ pipewright add dockerfile
 
 # Explicit
 pipewright add dockerfile --framework nestjs --port 3000 --node 20
-
-# Vue with custom port
-pipewright add dockerfile --framework vue --port 8080
 ```
 
 ---
 
 ## Global Options
-
-These options work on every command:
 
 | Option | Description |
 |---|---|
@@ -190,7 +172,7 @@ These options work on every command:
 
 ## What Gets Generated
 
-### NestJS Project (`pipewright init --framework nestjs`)
+### NestJS + GitHub Actions
 
 ```
 my-app/
@@ -201,107 +183,33 @@ my-app/
 │   ├── app.controller.spec.ts
 │   └── app.service.ts
 ├── test/
-│   ├── app.e2e-spec.ts
-│   └── jest-e2e.json
+├── .github/
+│   └── workflows/
+│       └── ci.yml
 ├── package.json
 ├── tsconfig.json
-├── tsconfig.build.json
 ├── nest-cli.json
-├── .eslintrc.js
-├── .prettierrc
 └── .gitignore
 ```
 
-### Vue 3 Project (`pipewright init --framework vue`)
+### Supported Combinations
 
-```
-my-app/
-├── src/
-│   ├── main.ts
-│   ├── App.vue
-│   └── env.d.ts
-├── index.html
-├── vite.config.ts
-├── package.json
-├── tsconfig.json
-├── tsconfig.app.json
-├── tsconfig.node.json
-└── .gitignore
-```
-
-### GitHub Actions Pipeline (`--provider github`)
-
-```
-.github/
-└── workflows/
-    ├── ci.yml              # Build, lint, typecheck, test (matrix: multiple Node versions)
-    ├── docker-publish.yml  # Build & push to GHCR (only with --docker)
-    └── release.yml         # Changesets-based release (only with --release)
-```
-
-### Azure DevOps Pipeline (`--provider azure`)
-
-```
-azure-pipelines.yml         # Stages: install → lint → build → test → docker (optional)
-```
-
-### GitLab CI Pipeline (`--provider gitlab`)
-
-```
-.gitlab-ci.yml              # Stages: install → lint → build → test → docker (optional)
-```
-
-### Dockerfile (`--docker` or `pipewright add dockerfile`)
-
-Both NestJS and Vue generate production-ready **multi-stage** Dockerfiles:
-
-- **NestJS**: `deps` stage (prod deps) + `build` stage + minimal `runner` stage
-- **Vue**: `build` stage + `nginx:stable-alpine` runner
-
----
-
-## Supported Combinations
-
-| Framework | GitHub Actions | Azure DevOps | GitLab CI | Dockerfile |
-|---|:---:|:---:|:---:|:---:|
-| NestJS | ✅ | ✅ | ✅ | ✅ |
-| Vue 3 | ✅ | ✅ | ✅ | ✅ |
+| | GitHub Actions | Azure DevOps | GitLab CI |
+|---|:---:|:---:|:---:|
+| **NestJS** | ✅ | ✅ | ✅ |
+| **Vue 3** | ✅ | ✅ | ✅ |
 
 ---
 
 ## Requirements
 
-- **Node.js** `>=18.17`
-- **npm** / **pnpm** / **yarn**
+- Node.js `>=18.17`
 
 ---
 
-## CI/CD Features
+## Contributing
 
-### GitHub Actions (`ci.yml`)
-
-- Runs on `push` to `main`/`develop` and all `pull_request` to `main`
-- Matrix strategy: configurable Node version
-- Steps: checkout → setup Node (with cache) → install → lint → typecheck → build → test
-- Optional Docker build-check job
-
-### GitHub Actions (`release.yml`, with `--release`)
-
-- Powered by [Changesets](https://github.com/changesets/changesets)
-- Pushes to `main` create a "Release PR" or publish to npm automatically
-- Requires `NPM_TOKEN` secret
-
-### Azure DevOps (`azure-pipelines.yml`)
-
-- Stages: Build → (optional) Docker
-- Caches `node_modules`
-- Only runs Docker stage on `main` branch
-
-### GitLab CI (`.gitlab-ci.yml`)
-
-- Stages: install → lint → build → test → (optional) docker → (optional) release
-- Uses `node:<version>-alpine` image
-- Artifact passing between stages
+Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for patterns, architecture explanation, and step-by-step guides to add new providers and generators.
 
 ---
 
@@ -314,3 +222,7 @@ MIT — see [LICENSE](LICENSE).
 ## Acknowledgements
 
 Inspired by [create-t3-app](https://github.com/t3-oss/create-t3-app) and the [Nest CLI](https://github.com/nestjs/nest-cli).
+
+<div align="center">
+  <sub>Built with ❤️ by <a href="https://github.com/BielQuirino">BielQuirino</a></sub>
+</div>
