@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    name: Build & Test
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [<%= nodeVersion %>]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "<%= packageManager %>"
+
+      - name: Install dependencies
+        run: <%= packageManager === 'npm' ? 'npm ci' : packageManager + ' install' %>
+
+      - name: Lint
+        run: <%= packageManager %> run lint
+
+      - name: Type check
+        run: <%= packageManager %> run typecheck
+
+      - name: Build
+        run: <%= packageManager %> run build
+
+      - name: Test
+        run: <%= packageManager %> run test
+<% if (withDocker) { %>
+  docker-build:
+    name: Docker Build Check
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t <%= projectName %>:${{ github.sha }} .
+<% } %>

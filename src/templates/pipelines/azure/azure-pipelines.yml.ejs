@@ -1,0 +1,51 @@
+trigger:
+  branches:
+    include:
+      - main
+      - develop
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  nodeVersion: "<%= nodeVersion %>"
+
+stages:
+  - stage: Build
+    displayName: Build & Test
+    jobs:
+      - job: BuildJob
+        displayName: Build
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: "$(nodeVersion)"
+            displayName: Install Node.js
+
+          - script: <%= packageManager === 'npm' ? 'npm ci' : packageManager + ' install' %>
+            displayName: Install dependencies
+
+          - script: <%= packageManager %> run lint
+            displayName: Lint
+
+          - script: <%= packageManager %> run build
+            displayName: Build
+
+          - script: <%= packageManager %> run test
+            displayName: Test
+<% if (withDocker) { %>
+  - stage: Docker
+    displayName: Docker Build
+    dependsOn: Build
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    jobs:
+      - job: DockerJob
+        displayName: Build Docker Image
+        steps:
+          - task: Docker@2
+            inputs:
+              command: build
+              dockerfile: Dockerfile
+              tags: $(Build.BuildId)
+            displayName: Build Docker image
+<% } %>

@@ -1,0 +1,48 @@
+name: Feature Request
+description: Suggest a new provider, generator, flag, or improvement
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Feature requests are welcome! Please describe the problem you're solving, not just the solution.
+
+  - type: dropdown
+    id: type
+    attributes:
+      label: Feature type
+      options:
+        - New CI/CD provider (e.g. CircleCI, Jenkins, Bitbucket)
+        - New framework generator (e.g. Fastify, Next.js, SvelteKit)
+        - New flag or option for an existing command
+        - UX improvement
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What problem are you trying to solve? What repetitive task does this eliminate?
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: What should the CLI do? Include example commands if possible.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Other approaches you thought about
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context

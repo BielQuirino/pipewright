@@ -1,0 +1,61 @@
+image: node:<%= nodeVersion %>-alpine
+
+stages:
+  - install
+  - lint
+  - build
+  - test
+<% if (withDocker) { %>  - docker<% } %>
+<% if (withRelease) { %>  - release<% } %>
+
+cache:
+  paths:
+    - node_modules/
+
+install:
+  stage: install
+  script:
+    - <%= packageManager === 'npm' ? 'npm ci' : packageManager + ' install' %>
+  artifacts:
+    paths:
+      - node_modules/
+    expire_in: 1 hour
+
+lint:
+  stage: lint
+  script:
+    - <%= packageManager %> run lint
+
+build:
+  stage: build
+  script:
+    - <%= packageManager %> run build
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 day
+
+test:
+  stage: test
+  script:
+    - <%= packageManager %> run test
+<% if (withDocker) { %>
+docker-build:
+  stage: docker
+  image: docker:24
+  services:
+    - docker:24-dind
+  only:
+    - main
+  script:
+    - docker build -t <%= projectName %>:$CI_COMMIT_SHA .
+<% } %>
+<% if (withRelease) { %>
+release:
+  stage: release
+  only:
+    - main
+  script:
+    - <%= packageManager === 'npm' ? 'npm ci' : packageManager + ' install' %>
+    - <%= packageManager %> run release
+<% } %>

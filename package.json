@@ -1,0 +1,91 @@
+{
+  "name": "pipewright",
+  "version": "0.1.0",
+  "description": "Scaffold CI/CD pipelines and project boilerplates interactively",
+  "type": "module",
+  "bin": {
+    "pipewright": "dist/cli.js",
+    "pw": "dist/cli.js"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=18.17"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "vitest run test/e2e",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "release": "changeset publish",
+    "prepare": "husky"
+  },
+  "keywords": [
+    "cli",
+    "scaffold",
+    "cicd",
+    "devtool",
+    "github-actions",
+    "azure-devops",
+    "gitlab-ci",
+    "nestjs",
+    "vue",
+    "typescript"
+  ],
+  "author": "BielQuirino",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BielQuirino/pipewright.git"
+  },
+  "homepage": "https://github.com/BielQuirino/pipewright#readme",
+  "bugs": {
+    "url": "https://github.com/BielQuirino/pipewright/issues"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "commander": "^12.1.0",
+    "ejs": "^3.1.10",
+    "fs-extra": "^11.2.0",
+    "inquirer": "^10.2.2",
+    "ora": "^8.1.1"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.9",
+    "@commitlint/cli": "^19.5.0",
+    "@commitlint/config-conventional": "^19.5.0",
+    "@types/ejs": "^3.1.5",
+    "@types/fs-extra": "^11.0.4",
+    "@types/inquirer": "^9.0.7",
+    "@types/node": "^22.9.0",
+    "@typescript-eslint/eslint-plugin": "^8.15.0",
+    "@typescript-eslint/parser": "^8.15.0",
+    "eslint": "^9.15.0",
+    "execa": "^9.5.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.2.10",
+    "prettier": "^3.3.3",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.6"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml}": [
+      "prettier --write"
+    ]
+  }
+}
