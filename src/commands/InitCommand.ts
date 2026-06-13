@@ -14,7 +14,7 @@ interface InitOptions {
   release?: boolean;
   git?: boolean;
   install?: boolean;
-  noPipeline?: boolean;
+  pipeline: boolean; // Commander sets this via --no-pipeline (false = skip)
 }
 
 export class InitCommand extends BaseCommand {
@@ -76,7 +76,7 @@ export class InitCommand extends BaseCommand {
         type: "confirm",
         message: "Add CI/CD pipeline?",
         default: true,
-        when: () => !options.noPipeline,
+        when: () => options.pipeline,
       },
       {
         name: "provider",
@@ -88,14 +88,14 @@ export class InitCommand extends BaseCommand {
           { name: "GitLab CI", value: "gitlab" },
         ],
         default: "github",
-        when: (a) => !options.provider && (a["withPipeline"] as boolean) !== false,
+        when: (a) => !options.provider && options.pipeline && (a["withPipeline"] as boolean) !== false,
       },
       {
         name: "nodeVersion",
         type: "input",
         message: "Node version for CI:",
         default: options.node ?? "20",
-        when: (a) => (a["withPipeline"] as boolean) !== false,
+        when: (a) => options.pipeline && (a["withPipeline"] as boolean) !== false,
       },
       {
         name: "withDocker",
@@ -111,6 +111,7 @@ export class InitCommand extends BaseCommand {
         default: false,
         when: (a) =>
           !options.release &&
+          options.pipeline &&
           (a["withPipeline"] as boolean) !== false &&
           a["provider"] === "github",
       },
@@ -125,7 +126,7 @@ export class InitCommand extends BaseCommand {
     const nodeVersion = (answers["nodeVersion"] as string | undefined) ?? options.node ?? "20";
     const withDocker = options.docker ?? (answers["withDocker"] as boolean) ?? false;
     const withRelease = options.release ?? (answers["withRelease"] as boolean) ?? false;
-    const withPipeline = !options.noPipeline && (answers["withPipeline"] as boolean) !== false;
+    const withPipeline = options.pipeline && (answers["withPipeline"] as boolean) !== false;
     const providerId = (options.provider ??
       (answers["provider"] as ProviderId | undefined)) as ProviderId | undefined;
 
