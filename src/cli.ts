@@ -63,7 +63,8 @@ program.parseAsync(process.argv).catch((err: unknown) => {
   if (err instanceof PipewrightError) {
     process.stderr.write(`\n✖ ${err.message}\n`);
     process.exit("exitCode" in err ? (err as { exitCode: number }).exitCode : 1);
+  } else {
+    process.stderr.write(`\n✖ Unexpected error: ${String(err)}\n`);
+    process.exit(2);
   }
-  process.stderr.write(`\n✖ Unexpected error: ${String(err)}\n`);
-  process.exit(2);
 });

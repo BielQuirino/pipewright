@@ -181,7 +181,7 @@ export class InitCommand extends BaseCommand {
 
     logger.blank();
     for (const entry of summary) {
-      const label = entry.action === "create" ? chalk.green("create") : chalk.yellow("update");
+      const label = entry.action === "create" ? chalk.green("create") : chalk.yellow("overwrite");
       logger.info(`  ${label}  ${entry.relativePath}`);
     }
     logger.blank();
@@ -196,10 +196,6 @@ export class InitCommand extends BaseCommand {
     logger.info(`Next steps:`);
     logger.info(`  cd ${projectName}`);
 
-    if (options.install) {
-      logger.info(`  ${packageManager} install`);
-    } else {
-      logger.info(`  ${packageManager} install`);
-    }
+    logger.info(`  ${packageManager} install`);
   }
 }

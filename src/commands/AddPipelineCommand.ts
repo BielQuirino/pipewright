@@ -97,7 +97,7 @@ export class AddPipelineCommand extends BaseCommand {
 
     logger.blank();
     for (const entry of summary) {
-      const label = entry.action === "create" ? chalk.green("create") : chalk.yellow("update");
+      const label = entry.action === "create" ? chalk.green("create") : chalk.yellow("overwrite");
       logger.info(`  ${label}  ${entry.relativePath}`);
     }
     logger.blank();

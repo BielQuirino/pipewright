@@ -17,26 +17,26 @@ async function copyDir(src: string, dest: string): Promise<void> {
   }
 }
 
-export default defineConfig({
-  entry: {
-    cli: "src/cli.ts",
-    index: "src/index.ts",
+const external = ["commander", "@inquirer/prompts", "chalk", "ora", "ejs", "fs-extra"];
+
+export default defineConfig([
+  {
+    entry: { cli: "src/cli.ts" },
+    format: ["esm"],
+    banner: { js: "#!/usr/bin/env node" },
+    dts: false,
+    clean: true,
+    external,
   },
-  format: ["esm"],
-  dts: true,
-  clean: true,
-  noExternal: [],
-  external: [
-    "commander",
-    "inquirer",
-    "@inquirer/prompts",
-    "chalk",
-    "ora",
-    "ejs",
-    "fs-extra",
-    "execa",
-  ],
-  async onSuccess() {
-    await copyDir("src/templates", "dist/templates");
+  {
+    entry: { index: "src/index.ts" },
+    format: ["esm", "cjs"],
+    shims: true,
+    dts: true,
+    clean: false,
+    external,
+    async onSuccess() {
+      await copyDir("src/templates", "dist/templates");
+    },
   },
-});
+]);
