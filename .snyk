@@ -1,0 +1,8 @@
+# Snyk policy file
+version: v1.25.0
+
+exclude:
+  global:
+    - src/commands/AddDockerfileCommand.ts
+    - src/generators/dockerfile/DockerfileGenerator.ts
+    - src/generators/dockerfile/dockerfile.config.ts
