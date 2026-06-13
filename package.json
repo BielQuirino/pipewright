@@ -46,7 +46,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/BielQuirino/pipewright.git"
+    "url": "git+https://github.com/BielQuirino/pipewright.git"
   },
   "homepage": "https://github.com/BielQuirino/pipewright#readme",
   "bugs": {
